@@ -3,7 +3,7 @@ package biz
 import (
 	"context"
 
-	v1 "devops-agent/api/helloworld/v1"
+	v1 "devops-agent/api/agent/v1"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
