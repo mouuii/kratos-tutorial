@@ -14,7 +14,11 @@ service Agent {
 			get: "/helloworld/{name}"
 		};
 	};
-	rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentReply);
+	rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentReply){
+		option (google.api.http) = {
+			get: "/devops"
+		};
+	};
 	rpc DeleteAgent (DeleteAgentRequest) returns (DeleteAgentReply);
 	rpc GetAgent (GetAgentRequest) returns (GetAgentReply);
 	rpc ListAgent (ListAgentRequest) returns (ListAgentReply);

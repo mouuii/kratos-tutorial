@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"fmt"
 
 	"devops-agent/internal/biz"
 
@@ -22,7 +23,9 @@ func NewGreeterRepo(data *Data, logger log.Logger) biz.GreeterRepo {
 }
 
 func (r *greeterRepo) Save(ctx context.Context, g *biz.Greeter) (*biz.Greeter, error) {
-	return g, nil
+	_, err := r.data.db.User.Create().SetName("dd").SetAge(12).Save(ctx)
+	fmt.Println(err)
+	return g, err
 }
 
 func (r *greeterRepo) Update(ctx context.Context, g *biz.Greeter) (*biz.Greeter, error) {

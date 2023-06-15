@@ -3,9 +3,21 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Agent API
     version: 0.0.1
 paths:
+    /devops:
+        get:
+            tags:
+                - Agent
+            operationId: Agent_UpdateAgent
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.agent.v1.UpdateAgentReply'
     /helloworld/{name}:
         get:
             tags:
@@ -31,13 +43,8 @@ components:
             properties:
                 result:
                     type: string
-        helloworld.v1.HelloReply:
+        api.agent.v1.UpdateAgentReply:
             type: object
-            properties:
-                message:
-                    type: string
-            description: The response message containing the greetings
+            properties: {}
 tags:
     - name: Agent
-    - name: Greeter
-      description: The greeting service definition.

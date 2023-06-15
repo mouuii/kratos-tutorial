@@ -20,14 +20,17 @@ var _ = binding.EncodeURL
 const _ = http.SupportPackageIsVersion1
 
 const OperationAgentCreateAgent = "/api.agent.v1.Agent/CreateAgent"
+const OperationAgentUpdateAgent = "/api.agent.v1.Agent/UpdateAgent"
 
 type AgentHTTPServer interface {
 	CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error)
+	UpdateAgent(context.Context, *UpdateAgentRequest) (*UpdateAgentReply, error)
 }
 
 func RegisterAgentHTTPServer(s *http.Server, srv AgentHTTPServer) {
 	r := s.Route("/")
 	r.GET("/helloworld/{name}", _Agent_CreateAgent0_HTTP_Handler(srv))
+	r.GET("/devops", _Agent_UpdateAgent0_HTTP_Handler(srv))
 }
 
 func _Agent_CreateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
@@ -52,8 +55,28 @@ func _Agent_CreateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context
 	}
 }
 
+func _Agent_UpdateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in UpdateAgentRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAgentUpdateAgent)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.UpdateAgent(ctx, req.(*UpdateAgentRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*UpdateAgentReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 type AgentHTTPClient interface {
 	CreateAgent(ctx context.Context, req *CreateAgentRequest, opts ...http.CallOption) (rsp *CreateAgentReply, err error)
+	UpdateAgent(ctx context.Context, req *UpdateAgentRequest, opts ...http.CallOption) (rsp *UpdateAgentReply, err error)
 }
 
 type AgentHTTPClientImpl struct {
@@ -69,6 +92,19 @@ func (c *AgentHTTPClientImpl) CreateAgent(ctx context.Context, in *CreateAgentRe
 	pattern := "/helloworld/{name}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationAgentCreateAgent))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *AgentHTTPClientImpl) UpdateAgent(ctx context.Context, in *UpdateAgentRequest, opts ...http.CallOption) (*UpdateAgentReply, error) {
+	var out UpdateAgentReply
+	pattern := "/devops"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationAgentUpdateAgent))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
