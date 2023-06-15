@@ -9,13 +9,17 @@ import (
 
 type AgentService struct {
 	pb.UnimplementedAgentServer
+	uc *biz.GreeterUsecase
 }
 
 func NewAgentService(uc *biz.GreeterUsecase) *AgentService {
-	return &AgentService{}
+	return &AgentService{
+		uc: uc,
+	}
 }
 
 func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentRequest) (*pb.CreateAgentReply, error) {
+	s.uc.CreateGreeter(ctx, &biz.Greeter{})
 	return &pb.CreateAgentReply{
 		Result: "hello" + req.Name,
 	}, nil
