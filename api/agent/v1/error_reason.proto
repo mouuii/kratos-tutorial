@@ -10,4 +10,5 @@ option java_package = "api.agent.v1";
 enum ErrorReason {
   GREETER_UNSPECIFIED = 0;
   USER_NOT_FOUND = 1;
+  USER_ALREADY_EXIST = 2;
 }

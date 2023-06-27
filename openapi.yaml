@@ -18,31 +18,39 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.agent.v1.UpdateAgentReply'
-    /helloworld/{name}:
-        get:
+    /user/register:
+        post:
             tags:
                 - Agent
-            operationId: Agent_CreateAgent
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+            operationId: Agent_RegistryUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.agent.v1.CreateUserRequest'
+                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.agent.v1.CreateAgentReply'
+                                $ref: '#/components/schemas/api.agent.v1.CreateUserReply'
 components:
     schemas:
-        api.agent.v1.CreateAgentReply:
+        api.agent.v1.CreateUserReply:
             type: object
             properties:
                 result:
                     type: string
+        api.agent.v1.CreateUserRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                age:
+                    type: integer
+                    format: int32
         api.agent.v1.UpdateAgentReply:
             type: object
             properties: {}

@@ -28,9 +28,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	agentService := service.NewAgentService(greeterUsecase)
+	userRepo := data.NewUserRepo(dataData, logger)
+	userUsecase := biz.NewUserUsecase(userRepo, logger)
+	agentService := service.NewAgentService(userUsecase)
 	grpcServer := server.NewGRPCServer(confServer, agentService, logger)
 	httpServer := server.NewHTTPServer(confServer, agentService, logger)
 	app := newApp(logger, grpcServer, httpServer)

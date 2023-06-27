@@ -4,6 +4,7 @@ import (
 	v1 "devops-agent/api/agent/v1"
 	"devops-agent/internal/conf"
 	"devops-agent/internal/service"
+	"github.com/go-kratos/swagger-api/openapiv2"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -27,6 +28,8 @@ func NewHTTPServer(c *conf.Server, agent *service.AgentService, logger log.Logge
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
+	openAPIhandler := openapiv2.NewHandler()
+	srv.HandlePrefix("/q/", openAPIhandler)
 	v1.RegisterAgentHTTPServer(srv, agent)
 	return srv
 }

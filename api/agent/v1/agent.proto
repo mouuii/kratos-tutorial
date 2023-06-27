@@ -9,9 +9,10 @@ option java_multiple_files = true;
 option java_package = "api.agent.v1";
 
 service Agent {
-	rpc CreateAgent (CreateAgentRequest) returns (CreateAgentReply){
+	rpc RegistryUser (CreateUserRequest) returns (CreateUserReply){
 		option (google.api.http) = {
-			get: "/helloworld/{name}"
+			post: "/user/register"
+			body: "*"
 		};
 	};
 	rpc UpdateAgent (UpdateAgentRequest) returns (UpdateAgentReply){
@@ -24,10 +25,11 @@ service Agent {
 	rpc ListAgent (ListAgentRequest) returns (ListAgentReply);
 }
 
-message CreateAgentRequest {
+message CreateUserRequest {
 	string name = 1;
+	int32 age = 2;
 }
-message CreateAgentReply {
+message CreateUserReply {
 	string result = 1;
 }
 

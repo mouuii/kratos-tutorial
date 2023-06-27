@@ -19,38 +19,35 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationAgentCreateAgent = "/api.agent.v1.Agent/CreateAgent"
+const OperationAgentRegistryUser = "/api.agent.v1.Agent/RegistryUser"
 const OperationAgentUpdateAgent = "/api.agent.v1.Agent/UpdateAgent"
 
 type AgentHTTPServer interface {
-	CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error)
+	RegistryUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	UpdateAgent(context.Context, *UpdateAgentRequest) (*UpdateAgentReply, error)
 }
 
 func RegisterAgentHTTPServer(s *http.Server, srv AgentHTTPServer) {
 	r := s.Route("/")
-	r.GET("/helloworld/{name}", _Agent_CreateAgent0_HTTP_Handler(srv))
+	r.POST("/user/register", _Agent_RegistryUser0_HTTP_Handler(srv))
 	r.GET("/devops", _Agent_UpdateAgent0_HTTP_Handler(srv))
 }
 
-func _Agent_CreateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
+func _Agent_RegistryUser0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in CreateAgentRequest
-		if err := ctx.BindQuery(&in); err != nil {
+		var in CreateUserRequest
+		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationAgentCreateAgent)
+		http.SetOperation(ctx, OperationAgentRegistryUser)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateAgent(ctx, req.(*CreateAgentRequest))
+			return srv.RegistryUser(ctx, req.(*CreateUserRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*CreateAgentReply)
+		reply := out.(*CreateUserReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -75,7 +72,7 @@ func _Agent_UpdateAgent0_HTTP_Handler(srv AgentHTTPServer) func(ctx http.Context
 }
 
 type AgentHTTPClient interface {
-	CreateAgent(ctx context.Context, req *CreateAgentRequest, opts ...http.CallOption) (rsp *CreateAgentReply, err error)
+	RegistryUser(ctx context.Context, req *CreateUserRequest, opts ...http.CallOption) (rsp *CreateUserReply, err error)
 	UpdateAgent(ctx context.Context, req *UpdateAgentRequest, opts ...http.CallOption) (rsp *UpdateAgentReply, err error)
 }
 
@@ -87,13 +84,13 @@ func NewAgentHTTPClient(client *http.Client) AgentHTTPClient {
 	return &AgentHTTPClientImpl{client}
 }
 
-func (c *AgentHTTPClientImpl) CreateAgent(ctx context.Context, in *CreateAgentRequest, opts ...http.CallOption) (*CreateAgentReply, error) {
-	var out CreateAgentReply
-	pattern := "/helloworld/{name}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationAgentCreateAgent))
+func (c *AgentHTTPClientImpl) RegistryUser(ctx context.Context, in *CreateUserRequest, opts ...http.CallOption) (*CreateUserReply, error) {
+	var out CreateUserReply
+	pattern := "/user/register"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAgentRegistryUser))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

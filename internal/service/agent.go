@@ -9,19 +9,22 @@ import (
 
 type AgentService struct {
 	pb.UnimplementedAgentServer
-	uc *biz.GreeterUsecase
+	uc *biz.UserUsecase
 }
 
-func NewAgentService(uc *biz.GreeterUsecase) *AgentService {
+func NewAgentService(uc *biz.UserUsecase) *AgentService {
 	return &AgentService{
 		uc: uc,
 	}
 }
 
-func (s *AgentService) CreateAgent(ctx context.Context, req *pb.CreateAgentRequest) (*pb.CreateAgentReply, error) {
-	s.uc.CreateGreeter(ctx, &biz.Greeter{})
-	return &pb.CreateAgentReply{
-		Result: "hello" + req.Name,
+func (s *AgentService) RegistryUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
+	user, err := s.uc.Register(ctx, &biz.User{req.Name, req.Age})
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CreateUserReply{
+		Result: "hello" + user.Name,
 	}, nil
 }
 func (s *AgentService) UpdateAgent(ctx context.Context, req *pb.UpdateAgentRequest) (*pb.UpdateAgentReply, error) {

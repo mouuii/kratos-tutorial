@@ -19,18 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Agent_CreateAgent_FullMethodName = "/api.agent.v1.Agent/CreateAgent"
-	Agent_UpdateAgent_FullMethodName = "/api.agent.v1.Agent/UpdateAgent"
-	Agent_DeleteAgent_FullMethodName = "/api.agent.v1.Agent/DeleteAgent"
-	Agent_GetAgent_FullMethodName    = "/api.agent.v1.Agent/GetAgent"
-	Agent_ListAgent_FullMethodName   = "/api.agent.v1.Agent/ListAgent"
+	Agent_RegistryUser_FullMethodName = "/api.agent.v1.Agent/RegistryUser"
+	Agent_UpdateAgent_FullMethodName  = "/api.agent.v1.Agent/UpdateAgent"
+	Agent_DeleteAgent_FullMethodName  = "/api.agent.v1.Agent/DeleteAgent"
+	Agent_GetAgent_FullMethodName     = "/api.agent.v1.Agent/GetAgent"
+	Agent_ListAgent_FullMethodName    = "/api.agent.v1.Agent/ListAgent"
 )
 
 // AgentClient is the client API for Agent service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AgentClient interface {
-	CreateAgent(ctx context.Context, in *CreateAgentRequest, opts ...grpc.CallOption) (*CreateAgentReply, error)
+	RegistryUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error)
 	UpdateAgent(ctx context.Context, in *UpdateAgentRequest, opts ...grpc.CallOption) (*UpdateAgentReply, error)
 	DeleteAgent(ctx context.Context, in *DeleteAgentRequest, opts ...grpc.CallOption) (*DeleteAgentReply, error)
 	GetAgent(ctx context.Context, in *GetAgentRequest, opts ...grpc.CallOption) (*GetAgentReply, error)
@@ -45,9 +45,9 @@ func NewAgentClient(cc grpc.ClientConnInterface) AgentClient {
 	return &agentClient{cc}
 }
 
-func (c *agentClient) CreateAgent(ctx context.Context, in *CreateAgentRequest, opts ...grpc.CallOption) (*CreateAgentReply, error) {
-	out := new(CreateAgentReply)
-	err := c.cc.Invoke(ctx, Agent_CreateAgent_FullMethodName, in, out, opts...)
+func (c *agentClient) RegistryUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserReply, error) {
+	out := new(CreateUserReply)
+	err := c.cc.Invoke(ctx, Agent_RegistryUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (c *agentClient) ListAgent(ctx context.Context, in *ListAgentRequest, opts 
 // All implementations must embed UnimplementedAgentServer
 // for forward compatibility
 type AgentServer interface {
-	CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error)
+	RegistryUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
 	UpdateAgent(context.Context, *UpdateAgentRequest) (*UpdateAgentReply, error)
 	DeleteAgent(context.Context, *DeleteAgentRequest) (*DeleteAgentReply, error)
 	GetAgent(context.Context, *GetAgentRequest) (*GetAgentReply, error)
@@ -106,8 +106,8 @@ type AgentServer interface {
 type UnimplementedAgentServer struct {
 }
 
-func (UnimplementedAgentServer) CreateAgent(context.Context, *CreateAgentRequest) (*CreateAgentReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateAgent not implemented")
+func (UnimplementedAgentServer) RegistryUser(context.Context, *CreateUserRequest) (*CreateUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegistryUser not implemented")
 }
 func (UnimplementedAgentServer) UpdateAgent(context.Context, *UpdateAgentRequest) (*UpdateAgentReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAgent not implemented")
@@ -134,20 +134,20 @@ func RegisterAgentServer(s grpc.ServiceRegistrar, srv AgentServer) {
 	s.RegisterService(&Agent_ServiceDesc, srv)
 }
 
-func _Agent_CreateAgent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateAgentRequest)
+func _Agent_RegistryUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AgentServer).CreateAgent(ctx, in)
+		return srv.(AgentServer).RegistryUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Agent_CreateAgent_FullMethodName,
+		FullMethod: Agent_RegistryUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AgentServer).CreateAgent(ctx, req.(*CreateAgentRequest))
+		return srv.(AgentServer).RegistryUser(ctx, req.(*CreateUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -232,8 +232,8 @@ var Agent_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AgentServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateAgent",
-			Handler:    _Agent_CreateAgent_Handler,
+			MethodName: "RegistryUser",
+			Handler:    _Agent_RegistryUser_Handler,
 		},
 		{
 			MethodName: "UpdateAgent",
