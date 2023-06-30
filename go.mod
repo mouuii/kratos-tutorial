@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	entgo.io/ent v0.12.3
+	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/go-kratos/kratos/v2 v2.6.2
 	github.com/go-kratos/swagger-api v1.0.1
 	github.com/go-sql-driver/mysql v1.7.1

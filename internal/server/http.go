@@ -4,6 +4,7 @@ import (
 	v1 "devops-agent/api/agent/v1"
 	"devops-agent/internal/conf"
 	"devops-agent/internal/service"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/swagger-api/openapiv2"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,6 +17,7 @@ func NewHTTPServer(c *conf.Server, agent *service.AgentService, logger log.Logge
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			validate.Validator(),
 		),
 	}
 	if c.Http.Network != "" {

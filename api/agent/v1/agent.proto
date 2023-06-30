@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.agent.v1;
 
 import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 option go_package = "devops-agent/api/agent/v1;v1";
 option java_multiple_files = true;
@@ -26,8 +27,8 @@ service Agent {
 }
 
 message CreateUserRequest {
-	string name = 1;
-	int32 age = 2;
+	string name = 1 [(validate.rules).string.min_len = 1];
+	int32 age = 2 [(validate.rules).int32 = {gt: 0}];
 }
 message CreateUserReply {
 	string result = 1;

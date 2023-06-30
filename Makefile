@@ -46,7 +46,7 @@ api:
 
 .PHONY: build
 # build
-build:
+build:all
 	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
 
 .PHONY: generate
@@ -62,7 +62,16 @@ all:
 	make api;
 	make config;
 	make generate;
+	make validate;
 
+.PHONY: validate
+# generate api proto
+validate:
+	protoc --proto_path=./api \
+	       --proto_path=./third_party \
+ 	       --go_out=paths=source_relative:./api \
+           --validate_out=paths=source_relative,lang=go:./api \
+	       $(API_PROTO_FILES)
 # show help
 help:
 	@echo ''
@@ -79,5 +88,12 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+
+
+.PHONY: run
+# build and run the service use local_config.yaml
+run: build
+	./bin/devops-agent -conf "configs"
+
 
 .DEFAULT_GOAL := help

@@ -4,6 +4,7 @@ import (
 	v1 "devops-agent/api/agent/v1"
 	"devops-agent/internal/conf"
 	"devops-agent/internal/service"
+	"github.com/go-kratos/kratos/v2/middleware/validate"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -15,6 +16,7 @@ func NewGRPCServer(c *conf.Server, agent *service.AgentService, logger log.Logge
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
+			validate.Validator(),
 		),
 	}
 	if c.Grpc.Network != "" {
