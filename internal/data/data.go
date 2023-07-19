@@ -9,6 +9,7 @@ import (
 	"github.com/google/wire"
 	// init mysql driver
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // ProviderSet is data providers.
@@ -17,7 +18,8 @@ var ProviderSet = wire.NewSet(NewData, NewUserRepo)
 // Data .
 type Data struct {
 	// TODO wrapped database client
-	db *ent.Client
+	db   *ent.Client
+	conf *conf.Data
 }
 
 // NewData .
@@ -36,6 +38,7 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 	return &Data{
-		db: client,
+		db:   client,
+		conf: c,
 	}, cleanup, nil
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"devops-agent/internal/biz"
 	"devops-agent/internal/data/ent/user"
+	"fmt"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -22,6 +23,7 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 }
 
 func (r *userRepo) Save(ctx context.Context, u *biz.User) (*biz.User, error) {
+	fmt.Println(r.data.conf.Cit)
 	_, err := r.data.db.User.Create().SetName(u.Name).SetAge(int(u.Age)).Save(ctx)
 	return u, err
 }

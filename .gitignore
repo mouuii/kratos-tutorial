@@ -13,8 +13,7 @@
 
 # Dependency directories (remove the comment below to include it)
 vendor/
-configs/
-configs/*.yaml
+
 
 # Go workspace file
 go.work
@@ -38,3 +37,4 @@ bin/
 .vscode/
 .idea/
 *.swp
+test.db

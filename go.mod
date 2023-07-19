@@ -9,6 +9,7 @@ require (
 	github.com/go-kratos/swagger-api v1.0.1
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/google/wire v0.5.0
+	github.com/mattn/go-sqlite3 v1.14.17
 	go.uber.org/automaxprocs v1.5.1
 	google.golang.org/genproto v0.0.0-20220524023933-508584e28198
 	google.golang.org/grpc v1.46.2
